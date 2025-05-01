@@ -7,11 +7,11 @@ namespace AcunmedyaAkademiStock.WebApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ProductController : ControllerBase
+    public class ProductsController : ControllerBase
     {
         private readonly ApiContext _context;
 
-        public ProductController(ApiContext context)
+        public ProductsController(ApiContext context)
         {
             _context = context;
         }
