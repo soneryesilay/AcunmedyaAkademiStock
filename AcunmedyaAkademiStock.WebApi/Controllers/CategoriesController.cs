@@ -41,7 +41,7 @@ namespace AcunmedyaAkademiStock.WebApi.Controllers
             return BadRequest("Ekleme işlemi başarısız");
         }
         
-        [HttpDelete]
+        [HttpDelete("{id}")]
         public IActionResult DeleteCategory(int id) {
             
             var value = _context.Categories.Find(id);

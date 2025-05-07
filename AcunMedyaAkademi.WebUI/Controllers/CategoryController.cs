@@ -1,6 +1,7 @@
 ﻿using AcunMedyaAkademi.WebUI.DTOs.CategoryDtos;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using System.Text;
 
 namespace AcunMedyaAkademi.WebUI.Controllers
 {
@@ -29,6 +30,38 @@ namespace AcunMedyaAkademi.WebUI.Controllers
                 return View(values);
             }
             return View();
+        }
+
+        [HttpGet]
+        public IActionResult CreateCategory()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CreateCategory(CreateCategoryDto dto)
+        {
+            if(dto!=null) {
+                var client = _httpClientFactory.CreateClient();
+                var jsonData = JsonConvert.SerializeObject(dto);
+                StringContent content = new StringContent(jsonData, Encoding.UTF8, "application/json");
+                await client.PostAsync("https://localhost:7053/api/Categories", content);
+                return RedirectToAction("CategoryList");
+            }
+            return View("CategoryList");
+        }
+
+        public async Task<IActionResult> DeleteCategory(int id)
+        {
+            var client = _httpClientFactory.CreateClient();
+            var response = await client.DeleteAsync($"https://localhost:7053/api/Categories/{id}");
+            if(response.IsSuccessStatusCode)
+            {
+                return RedirectToAction("CategoryList");
+            }
+            var errorMessage = await response.Content.ReadAsStringAsync();
+            ModelState.AddModelError("", $"Silme işlemi başarısız: {errorMessage}");
+            return RedirectToAction("CategoryList");
         }
     }
 }

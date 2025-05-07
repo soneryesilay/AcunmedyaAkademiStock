@@ -31,13 +31,20 @@ namespace AcunmedyaAkademiStock.WebApi.Controllers
             return Ok("Ürün başarıyla eklendi");
         }
 
-        [HttpDelete]
+        [HttpDelete("{id}")]
         public IActionResult DeleteProduct(int id)
         {
             var value = _context.Products.Find(id);
-            _context.Products.Remove(value);
-            _context.SaveChanges();
-            return Ok("Ürün başarıyla eklendi");
+
+            if (value != null)
+            {
+                _context.Products.Remove(value);
+                _context.SaveChanges();
+                return Ok("Silme işlemi başarılı");
+            }
+
+
+            return BadRequest($"Silme işlemi başarısız: ID {id} bulunamadı.");
         }
 
         [HttpGet("GetProduct")]
@@ -54,6 +61,8 @@ namespace AcunmedyaAkademiStock.WebApi.Controllers
             _context.SaveChanges();
             return Ok("Güncelleme başarılı");
         }
+
+      
 
     }
 }
